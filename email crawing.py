@@ -65,7 +65,8 @@ while len(new_urls):
 	# add the new url to the queue if it was not enqueued nor processed yet
 	if not link in new_urls and not link in processed_urls:
 		new_urls.append(link)
-    """
+	"""
+    
     
 
   
