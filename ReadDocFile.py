@@ -11,4 +11,3 @@ all_paras=document.paragraphs
 for para in all_paras:
     print(para.text)
 
-document.save('AfterRead.docx')

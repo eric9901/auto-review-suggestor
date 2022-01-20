@@ -8,7 +8,11 @@ elif type == 'P':
 
 pdfFileObject = open(Title,'rb')
 pdfReaderObject = PyPDF2.PdfFileReader(pdfFileObject)
-#firstPageObject =pdfReaderObject.getPage(0)
-#print(firstPageObject.extractText())
-docInfo = pdfReaderObject.getDocumentInfo()
-print(docInfo.title)
+for page in pdfReaderObject.pages:
+    print(page.extractText())
+
+#pageCount = pdfReaderObject.numPages
+#pageObj = pdfReaderObject.getPage(pageCount-1)
+#print(pageCount)
+#text += pageObj.extractText()
+
