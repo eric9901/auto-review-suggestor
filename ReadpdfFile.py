@@ -1,18 +1,13 @@
 import PyPDF2
-type = input ("Input the file type: D(Doc) P(PDF) ")
+import re
 Title= input("Input the file name")
-if type=='D':
-    Title+='.doc'
-elif type == 'P':
-    Title+='.pdf'
-
+Title+='.pdf'
 pdfFileObject = open(Title,'rb')
 pdfReaderObject = PyPDF2.PdfFileReader(pdfFileObject)
-for page in pdfReaderObject.pages:
-    print(page.extractText())
-
-#pageCount = pdfReaderObject.numPages
-#pageObj = pdfReaderObject.getPage(pageCount-1)
-#print(pageCount)
-#text += pageObj.extractText()
+NumPage=pdfReaderObject.getNumPages()
+page=pdfReaderObject.getPage(NumPage-1)
+PaperText=page.extractText()
+ReferList=PaperText.partition('References');
+res = ReferList[2].split()
+print(res)
 
