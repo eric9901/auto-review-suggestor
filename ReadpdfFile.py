@@ -1,3 +1,4 @@
+from cgitb import reset
 import PyPDF2
 import re
 Title= input("Input the file name: ")
