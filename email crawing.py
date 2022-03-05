@@ -13,9 +13,10 @@ soup = BeautifulSoup(response.content, 'html.parser')
 list(soup.children)
 searchResults = soup.find_all("h3")
 #get all http link of the searching result
+
 new_urls = deque();
-for result in searchResults:
-    new_urls.append(result.select_one("a").get("href"))
+#for result in searchResults:
+ #   new_urls.append(result.select_one("a").get("href"))
 #save the hyperlink to a queue for further process 
 
 # a queue of urls to be crawled   
@@ -26,7 +27,7 @@ for result in searchResults:
 processed_urls = set()
 
 # a set of crawled emails
-emails = set()
+emails = []
 
 # process urls one by one until we exhaust the queue
 while len(new_urls):
@@ -46,8 +47,8 @@ while len(new_urls):
 		# ignore pages with errors
 		continue
 	# extract all email addresses and add them into the resulting set
-	new_emails = set(re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", response.text, re.I))
-	emails.update(new_emails)
+	new_emails = re.search(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", response.text, re.I).group(0)
+	emails.append(new_emails)
 	if emails:
 		print(emails)
 		new_urls.clear()
