@@ -5,7 +5,7 @@ import requests.exceptions
 from urllib.parse import urlsplit
 from collections import deque
 import re
-#get google scholar result
+#get google  result
 
 def getUrl(search):
 	results = 10 # valid options 10, 20, 30, 40, 50, and 100
@@ -58,8 +58,6 @@ def getEmail(new_urls):
 		else:
 			email=''
 	return email
-url=getUrl('Lopea-Moratalla,T')
-email=getEmail(url)
 	
 
   
