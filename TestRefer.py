@@ -5,6 +5,7 @@ import time
 def checkNum(inputString):
     return not bool(re.search(r'\d', inputString))
 def getRefAuthor(Title):
+    Author=[]
     Title+='.pdf'
     pdfFileObject = open(Title,'rb')
     pdfReaderObject = PyPDF2.PdfFileReader(pdfFileObject,strict=False)
@@ -20,21 +21,12 @@ def getRefAuthor(Title):
             break;
         else:
             res +=PaperText
-    authors_and_year = re.split('(.*)(\d{4})\.', res)
-    if authors_and_year:
-        print(authors_and_year)
-    else:
-        print("Not match")
-    year, month, day, hour, min = map(int, time.strftime("%Y %m %d %H %M").split())
-    Author=[]
-    temp2=''
-#check element is it the author name 
-    for i in authors_and_year:
-    #Name length check for avoid paper title
-    #digit check 
-        if len(i) == 4 and i.isdigit() and int(i)<=year:
-            Author.append(temp2)
-        temp2=i
+    a=re.split("\(\d{4}\)",res)
+    refYear=re.findall("\(\d{4}\)",res)
+    for i in a:
+        t=re.findall(",.*",i)
+        if t:
+            print(t[-1])
     return(Author)
 file = input("input pdf file name: ")
 #get Author in reference list

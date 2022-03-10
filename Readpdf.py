@@ -1,6 +1,7 @@
 from cgitb import reset
 import PyPDF2
 import re
+import time
 def checkNum(inputString):
     return not bool(re.search(r'\d', inputString))
 def getRefAuthor(Title):
@@ -24,9 +25,14 @@ def getRefAuthor(Title):
 #check element is it the author name 
     for i in Temp:
     #Name length check
-        if(len(i)<=20 and len(i)>3 and checkNum(i)):
+        if(len(i)<=20 and len(i)>3):
             Author.append(i)
+
     return(Author)
 
+file = input("input pdf file name: ")
+#get Author in reference list
+Author=getRefAuthor(file)
+print(Author)
 
 
