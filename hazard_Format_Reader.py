@@ -68,66 +68,51 @@ def myExtractText(self, distance=None):
     return text
         
 # --- main ---
-        
-pdfFileObj = open('0.pdf', 'rb')
-pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+def getHazardfAuthor(Title):
+    Title+='.pdf'
+    pdfFileObj = open(Title, 'rb')
+    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
 
-text = ''
-for page in pdfReader.pages:
-    #text += page.extractText()  # original function
-    #text += myExtractText(page)        # modified function (works like original version)
-    #text += myExtractText(page, True)  # modified function (add `\n` after every `Tm`)
-    text += myExtractText(page, 17)  # modified function (add `\n` only if distance is bigger then `17`)   
+    text = ''
+    for page in pdfReader.pages:
+        text += myExtractText(page, 17)  # modified function (add `\n` only if distance is bigger then `17`)   
 
 # get only text after word `References`
-pos = text.lower().find('references')
+    pos = text.lower().find('references')
 
 # only referencers as text
-references = text[pos+len('references '):]
-print(references)
-print('\n------\n')
+    references = text[pos+len('references '):]
+
 # doc without references
-doc = text[:pos]
+    doc = text[:pos]
 
 # referencers as list
-references = references.split('\n')
+    references = references.split('\n')
 
 # remove empty lines and lines which have 2 chars (ie. page number)
-references = [item.strip() for item in references if len(item.strip()) > 2]
-
-print('\n--- names ---\n')
+    references = [item.strip() for item in references if len(item.strip()) > 2]
 
 
-data = []
 
-for nubmer, line in enumerate(references, 1): # skip last element with page number
-    line = line.strip()
-    if line:  # skip empty line
-    
-        authors_and_year = re.match('((.*)\. (\d{4})\.)', line)
+    data = []
+
+    for nubmer, line in enumerate(references, 1): # skip last element with page number
+        line = line.strip()
+        if line:  # skip empty line
+            authors_and_year = re.match('((.*)\. (\d{4})\.)', line)
         text, authors, year = authors_and_year.groups()
-        #print(text, '|', authors, '|', year)
+            #print(text, '|', authors, '|', year)
         
         names = re.split(',[ ]*and |,[ ]*| and ', authors)
         #print(names)
         
         # [(name, last_name), ...]
-        names = [(name, name.split(' ')[-1]) for name in names]
         #print(names)
         
         #print(' line:', line)
-       
         data.append((authors, names, year))
+    Author_Year=[]
+    for authors, names, year in data:
+        Author_Year.append((names[-1],year))
+    return Author_Year
 
-print('\n--- counting ---\n')
-
-# https://guides.lib.monash.edu/citing-referencing/APA-In-text
-# Tapanainen and J/~rvine, 
-
-for authors, names, year in data:
-    print('authors:', authors)
-    print('   year:', year)
-    print('  names:', names)
-    print(' et al.:', len(names) > 1)
-    print('   and :', len(names) == 2)
-    print('---')
