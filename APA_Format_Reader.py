@@ -30,14 +30,14 @@ def getAPAAuthor(Title):
         t=re.search(".*,.\..*",a[i])
         #check and format
         if t:
-            if (re.search("and",t.group(0))):
-                d=re.split("and",t.group(0))
+            if (re.search(" and ",t.group(0))):
+                d=re.split(" and ",t.group(0))
                 Author_Year.append((d[-1],refYear[i]))
                 #check etal format
-            elif re.search("etal",t.group(0)):
+            elif re.search("&",t.group(0)):
                 #if find remove it
-                t.group(0).replace('etal','')
-                Author_Year.append((t.group(0),refYear[i]))
+                d=re.split("&",t.group(0))
+                Author_Year.append((d[-1],refYear[i]))
             else:
                 Author_Year.append((t.group(0),refYear[i]))
     return(Author_Year)

@@ -1,11 +1,8 @@
 import PyPDF2
-from PyPDF2.pdf import *  # to import function used in origimal `extractText`
+from PyPDF2.pdf import *  
 
-# --- functions ---
 
 def myExtractText(self, distance=None):
-    # original code from `page.extractText()`
-    # https://github.com/mstamy2/PyPDF2/blob/d7b8d3e0f471530267827511cdffaa2ab48bc1ad/PyPDF2/pdf.py#L2645
     
     text = u_("")
 
@@ -55,12 +52,10 @@ def myExtractText(self, distance=None):
                 diff_x = prev_x - x
                 diff_y = prev_y - y
 
-                #print('>>>', diff_x, diff_y - y)
-                #text += f'| {diff_x}, {diff_y - y} |'
                 
-                if diff_y > distance or diff_y < 0:  # (bigger margin) or (move to top in next column)
+                if diff_y > distance or diff_y < 0:
                     text += '\n'
-                    #text += '\n' # to add empty line between elements
+                   
                     
                 prev_x = x
                 prev_y = y
@@ -68,7 +63,7 @@ def myExtractText(self, distance=None):
     return text
         
 # --- main ---
-def getHazardfAuthor(Title):
+def getCHICAGOAuthor(Title):
     Title+='.pdf'
     pdfFileObj = open(Title, 'rb')
     pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
@@ -79,12 +74,12 @@ def getHazardfAuthor(Title):
 
 # get only text after word `References`
     pos = text.lower().find('references')
+    if not (pos):
+        pos= text.lower().find('bibliography')
 
 # only referencers as text
-    references = text[pos+len('references '):]
 
-# doc without references
-    doc = text[:pos]
+    references = text[pos+len('references '):]
 
 # referencers as list
     references = references.split('\n')
@@ -92,27 +87,19 @@ def getHazardfAuthor(Title):
 # remove empty lines and lines which have 2 chars (ie. page number)
     references = [item.strip() for item in references if len(item.strip()) > 2]
 
-
-
     data = []
-
     for nubmer, line in enumerate(references, 1): # skip last element with page number
         line = line.strip()
         if line:  # skip empty line
             authors_and_year = re.match('((.*)\. (\d{4})\.)', line)
         text, authors, year = authors_and_year.groups()
-            #print(text, '|', authors, '|', year)
         
         names = re.split(',[ ]*and |,[ ]*| and ', authors)
-        #print(names)
-        
-        # [(name, last_name), ...]
-        #print(names)
-        
-        #print(' line:', line)
         data.append((authors, names, year))
     Author_Year=[]
     for authors, names, year in data:
+        if re.search("et al.",names):
+            names.replace("et al.","")
         Author_Year.append((names[-1],year))
     return Author_Year
 
